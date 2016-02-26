@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Test</title>
+		<meta name="description" content="Flickr Test">
+		<meta name="author" content="Donatas Srogis">
+		<style>
+			html, body {
+				min-height: 100%;
+				height: 100%;
+				margin:0;
+				padding:0;
+			}
+			body{
+				position: relative;
+			}
+			h1 {
+				margin: 0;
+			}
+			header, main, footer {
+				padding: 1em;
+			}
+			footer {
+				color: #333;
+				margin-top: 2em;
+			}
+			#img-container img {
+				margin: .2em;
+				cursor: pointer;
+			}
+			.overlay{
+				display: none;
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				z-index: 10;
+				background-color: rgba(0,0,0,.8); /* dim the background */
+			}
+			.centered {
+				display: none;
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				/* bring your own prefixes */
+				transform: translate(-50%, -50%);
+				background-color: #fff;
+				padding: .2em;
+				z-index: 11;
+			}
+		</style>
+	</head>
+	<body>
+		<header>
+			<nav><a href="./">Home</a></nav>
+			<h1>Flickr test</h1>
+			<p>https://www.flickr.com/services/api/flickr.photos.search.html</p>
+		</header>
+
+		<main>
+			<div id="img-container"></div>
+			<p id="page-current">Page: 1</p>
+			<p>
+				<a href="" id="turn-page-previous" title="Previous">Previous</a> |
+				<a href="" id="turn-page-next" title="Next">Next</a>
+			</p>
+		</main>
+
+		<footer>
+			<h4>Test requirements</h4>
+			<ol>
+				<li>Use flickr api or any api of your choice to get a list of photos(items) and display it on the page.
+					<br><code>https://api.flickr.com/services/rest/?method=flickr.photos.search&tags=soccer&api_key={key}&format=json</code></li>
+				<li>Paginate the list 10 photos per page.</li>
+				<li>When the user clicks on the photo, show it in an overlay.</li>
+			</ol>
+		</footer>
+
+		<div class="overlay" id="overlay"></div>
+		<div class="centered" id="show-big"></div>
+
+		<script>
+			var kolback;
+
+			( function () {
+
+				"use strict";
+
+				var pageNext = document.getElementById("turn-page-next"),
+				pagePrevious = document.getElementById("turn-page-previous"),
+				imgContainer = document.getElementById("img-container"),
+				pageCurrentContainer = document.getElementById("page-current"),
+				pageCurrent = 1,
+				imgURL = "",
+				overlay = document.getElementById("overlay"),
+				imgBigBox = document.getElementById("show-big"),
+				flickrURL = "https://api.flickr.com/services/rest/"
+				+ "?method=flickr.photos.search"
+				+ "&tags=soccer"
+				+ "&format=json"
+				+ "&api_key=9ff39d37362832b43414728be5efeae6"
+				+ "&jsoncallback=kolback"
+				+ "&per_page=10";
+
+				kolback = function(data) {
+					pageCurrent = data.photos.page;
+					imgContainer.innerHTML = "";
+					for (var key in data.photos.photo) {
+						var picture = data.photos.photo[key];
+						var title = picture.title;
+						imgURL = "https://farm"
+						+ picture.farm // farm-id
+						+ ".staticflickr.com/"
+						+ picture.server // server-id
+						+ "/"
+						+ picture.id // image-id
+						+ "_"
+						+ picture.secret // secret
+						+ "_s.jpg";
+						var img = document.createElement("img");
+						img.setAttribute("src", imgURL);
+						img.setAttribute("alt", title);
+						img.setAttribute("title", title);
+						imgContainer.appendChild(img);
+					}
+					pageCurrentContainer.innerHTML = "Page: " + pageCurrent;
+				};
+
+				pageNext.addEventListener("click", turnPage, false);
+				pagePrevious.addEventListener("click", turnPage, false);
+				imgContainer.addEventListener("click", showBig, false);
+				overlay.addEventListener("click", hide, false);
+
+				function jsonp(url) {
+					var script = document.createElement("script");
+					script.setAttribute("src", url);
+					document.body.appendChild(script);
+					document.body.removeChild(script);
+				}
+				function turnPage(e) {
+					e.preventDefault();
+					var page = this.id === "turn-page-next" ? pageCurrent + 1 : pageCurrent > 1 ? pageCurrent - 1 : 1,
+					flickrURLNew = flickrURL + "&page=" + page;
+					pageCurrentContainer.innerHTML = "Page: " + page + " ...loading";
+					jsonp(flickrURLNew);
+				}
+				function showBig(e) {
+					if (e.target !== e.currentTarget) {
+						var clickedItemSrc = e.target.src,
+						imgBigSrc = clickedItemSrc.replace("_s.jpg", ".jpg"),
+						imgBig = document.createElement("img");
+						imgBig.setAttribute("src", imgBigSrc);
+						imgBig.setAttribute("alt", "alt");
+						imgBig.setAttribute("title", "title");
+						imgBigBox.style.display = "block";
+						overlay.style.display = "block";
+						imgBigBox.appendChild(imgBig);
+					}
+					e.stopPropagation();
+				}
+				function hide() {
+					this.style.display = "none";
+					imgBigBox.innerHTML = "";
+					imgBigBox.style.display = "none";
+				}
+				jsonp(flickrURL);
+			}) ();
+		</script>
+	</body>
+</html>
