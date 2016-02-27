@@ -1,6 +1,6 @@
 # Sandbox
 
-**Demo paage:** [donsro.atwebpages.com/sandbox] (http://donsro.atwebpages.com/sandbox/index.html)
+**Demo page:** [donsro.atwebpages.com/sandbox] (http://donsro.atwebpages.com/sandbox/index.html)
 
 ### Portfolio and miscellaneous Javascript coding samples
 
