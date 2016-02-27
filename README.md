@@ -1,8 +1,6 @@
 # Sandbox
 
-[donsro.atwebpages.com/sandbox] (http://donsro.atwebpages.com/sandbox/index.html)
-
-[tabs] (https://github.com/donsro/Tabs)
+**Demo paage:** [donsro.atwebpages.com/sandbox] (http://donsro.atwebpages.com/sandbox/index.html)
 
 ### Portfolio and miscellaneous Javascript coding samples
 
@@ -12,4 +10,3 @@ Often times people ask me to provide my portfolio links or code samples from my 
  - [whattoexpect.com] (http://www.whattoexpect.com)  - Front end development. Worked on slideshow and photolist article layout.
  - [spafinder.com] (http://www.spafinder.com)  - Front end development. Worked on main website's navigation design and implementation, other modules.
  - [ml.com] (https://www.ml.com) - Prototype development.
-
