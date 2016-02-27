@@ -2,7 +2,7 @@
 
 [donsro.atwebpages.com/sandbox] (http://donsro.atwebpages.com/sandbox/index.html)
 
-[tabs] (/Tabs)
+[tabs] (https://github.com/donsro/Tabs)
 
 ### Portfolio and miscellaneous Javascript coding samples
 
